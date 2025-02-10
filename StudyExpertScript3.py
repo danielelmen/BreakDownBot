@@ -5,43 +5,32 @@ import google.generativeai as genai
 # Hent brugere fra secrets
 users = st.secrets["users"]
 
-def login():
-    """Simpel login-funktion uden behov for manuel genindlæsning."""
-    st.title("Log ind")
+# Hent brugere fra secrets
+users = st.secrets.get("users", {})
+
+def authenticate():
+    """Håndterer login med en sikker og stabil metode."""
+    if "authenticated" not in st.session_state:
+        st.session_state["authenticated"] = False
+    if "username" not in st.session_state:
+        st.session_state["username"] = ""
     
-    if "login_attempt" not in st.session_state:
-        st.session_state["login_attempt"] = False
+    if not st.session_state["authenticated"]:
+        st.title("Log ind")
+        username = st.text_input("Brugernavn")
+        password = st.text_input("Adgangskode", type="password")
+        
+        if st.button("Login"):
+            if username in users and users[username] == password:
+                st.session_state["authenticated"] = True
+                st.session_state["username"] = username
+                st.success("Login lykkedes! Appen er nu tilgængelig.")
+            else:
+                st.error("Forkert brugernavn eller adgangskode")
+        
+        st.stop()
 
-    username = st.text_input("Brugernavn")
-    password = st.text_input("Adgangskode", type="password")
-
-    if st.button("Login"):
-        if username in users and users[username] == password:
-            st.session_state["authenticated"] = True
-            st.session_state["username"] = username
-            st.session_state["login_attempt"] = True  # Trigger rerun i session
-            st.success("Login lykkedes!")
-            st.experimental_rerun()  # Sikrer at UI opdateres korrekt
-        else:
-            st.error("Forkert brugernavn eller adgangskode")
-
-# Sikrer at session state er initialiseret korrekt
-if "authenticated" not in st.session_state:
-    st.session_state["authenticated"] = False
-if "username" not in st.session_state:
-    st.session_state["username"] = ""
-if "login_attempt" not in st.session_state:
-    st.session_state["login_attempt"] = False
-
-# Hvis login er forsøgt, genindlæs siden
-if st.session_state["login_attempt"]:
-    st.session_state["login_attempt"] = False  # Nulstil flag efter genindlæsning
-    st.experimental_rerun()
-
-# Hvis ikke logget ind, vis login-skærm
-if not st.session_state["authenticated"]:
-    login()
-    st.stop()
+authenticate()
 
 
 
