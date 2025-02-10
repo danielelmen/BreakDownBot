@@ -20,18 +20,18 @@ def authenticate():
         username = st.text_input("Brugernavn")
         password = st.text_input("Adgangskode", type="password")
         
-        if st.button("Login"):
+        if st.button("Connect me!"):
             if username in users and users[username] == password:
                 st.session_state["authenticated"] = True
                 st.session_state["username"] = username
-                st.success("Login lykkedes! Appen genindlæses...")
+                st.success("Success - please wait")
                 st.rerun()  # Tvinger en opdatering af appen
             else:
-                st.error("Forkert brugernavn eller adgangskode")
+                st.error("Connection denied!")
         
         st.stop()
 
-authenticate()
+#authenticate()
 
 
 
