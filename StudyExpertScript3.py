@@ -6,24 +6,38 @@ import google.generativeai as genai
 users = st.secrets["users"]
 
 def login():
-    """Simpel login-funktion."""
+    """Simpel login-funktion med stabil rerun håndtering."""
     st.title("Log ind")
     username = st.text_input("Brugernavn")
     password = st.text_input("Adgangskode", type="password")
-    
+
     if st.button("Login"):
         if username in users and users[username] == password:
             st.session_state["authenticated"] = True
             st.session_state["username"] = username
-            st.success("Login lykkedes! Genindlæser...")
-            st.experimental_rerun()  # Tvinger genindlæsning
+            st.session_state["rerun_needed"] = True  # Sæt en flag til at håndtere rerun
+            st.success("Login lykkedes! Opdaterer visningen...")
         else:
             st.error("Forkert brugernavn eller adgangskode")
 
+# Sikrer at session state er initialiseret
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
+if "username" not in st.session_state:
+    st.session_state["username"] = ""
+if "rerun_needed" not in st.session_state:
+    st.session_state["rerun_needed"] = False
+
+# Tjekker om rerun er nødvendigt efter login
+if st.session_state["rerun_needed"]:
+    st.session_state["rerun_needed"] = False  # Nulstil flag
+    st.experimental_rerun()
+
 # Hvis ikke logget ind, vis login-skærm
-if not st.session_state.get("authenticated", False):
+if not st.session_state["authenticated"]:
     login()
     st.stop()
+
 
 
 # Load API key securely
