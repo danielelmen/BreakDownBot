@@ -6,8 +6,12 @@ import google.generativeai as genai
 users = st.secrets["users"]
 
 def login():
-    """Simpel login-funktion uden direkte rerun."""
+    """Simpel login-funktion uden behov for manuel genindlæsning."""
     st.title("Log ind")
+    
+    if "login_attempt" not in st.session_state:
+        st.session_state["login_attempt"] = False
+
     username = st.text_input("Brugernavn")
     password = st.text_input("Adgangskode", type="password")
 
@@ -15,8 +19,9 @@ def login():
         if username in users and users[username] == password:
             st.session_state["authenticated"] = True
             st.session_state["username"] = username
-            st.session_state["just_logged_in"] = True  # Flag for at håndtere første load
-            st.success("Login lykkedes! Genindlæs siden manuelt, hvis nødvendigt.")
+            st.session_state["login_attempt"] = True  # Trigger rerun i session
+            st.success("Login lykkedes!")
+            st.experimental_rerun()  # Sikrer at UI opdateres korrekt
         else:
             st.error("Forkert brugernavn eller adgangskode")
 
@@ -25,13 +30,13 @@ if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 if "username" not in st.session_state:
     st.session_state["username"] = ""
-if "just_logged_in" not in st.session_state:
-    st.session_state["just_logged_in"] = False
+if "login_attempt" not in st.session_state:
+    st.session_state["login_attempt"] = False
 
-# Hvis brugeren lige har logget ind, stop appen for at opdatere UI
-if st.session_state["just_logged_in"]:
-    st.session_state["just_logged_in"] = False  # Nulstil flag
-    st.stop()
+# Hvis login er forsøgt, genindlæs siden
+if st.session_state["login_attempt"]:
+    st.session_state["login_attempt"] = False  # Nulstil flag efter genindlæsning
+    st.experimental_rerun()
 
 # Hvis ikke logget ind, vis login-skærm
 if not st.session_state["authenticated"]:
