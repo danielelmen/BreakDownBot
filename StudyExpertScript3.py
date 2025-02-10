@@ -15,7 +15,8 @@ def login():
         if username in users and users[username] == password:
             st.session_state["authenticated"] = True
             st.session_state["username"] = username
-            st.experimental_rerun()
+            st.success("Login lykkedes! Genindlæser...")
+            st.experimental_rerun()  # Tvinger genindlæsning
         else:
             st.error("Forkert brugernavn eller adgangskode")
 
