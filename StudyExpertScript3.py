@@ -2,8 +2,14 @@ import streamlit as st
 import fitz  # PyMuPDF
 import google.generativeai as genai
 
+
+# Access API key from secrets
+genai.configure(openai_key=st.secrets["openai"])
+
+st.write("API Key Loaded Successfully!")  # Debugging
+
 # Konfigurer Gemini API
-genai.configure(api_key="AIzaSyB6co8hZEZp52yvW-_NWD4zW6L7H1yZmgA")  # Erstat med din rigtige API-nøgle
+genai.configure(api_key=openai_key)  # Erstat med din rigtige API-nøgle
 
 # Funktion til at læse systeminstruktion
 def read_system_instruction():
