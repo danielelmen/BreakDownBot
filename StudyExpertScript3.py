@@ -4,12 +4,12 @@ import google.generativeai as genai
 
 
 # Load API key securely
-openai_key = st.secrets["api_keys"]["openai"]  # Ensure this matches the secrets file
+gemini_key = st.secrets["api_keys"]["gemini"]  # Ensure this matches the secrets file
 
 st.write("API Key Loaded Successfully!")  # Debugging
 
 # Konfigurer Gemini API
-genai.configure(api_key=openai_key)  # Erstat med din rigtige API-nøgle
+genai.configure(api_key=gemini_key)  # Erstat med din rigtige API-nøgle
 
 # Funktion til at læse systeminstruktion
 def read_system_instruction():
