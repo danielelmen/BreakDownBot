@@ -2,11 +2,33 @@ import streamlit as st
 import fitz  # PyMuPDF
 import google.generativeai as genai
 
+# Hent brugere fra secrets
+users = st.secrets["users"]
+
+def login():
+    """Simpel login-funktion."""
+    st.title("Log ind")
+    username = st.text_input("Brugernavn")
+    password = st.text_input("Adgangskode", type="password")
+    
+    if st.button("Login"):
+        if username in users and users[username] == password:
+            st.session_state["authenticated"] = True
+            st.session_state["username"] = username
+            st.experimental_rerun()
+        else:
+            st.error("Forkert brugernavn eller adgangskode")
+
+# Hvis ikke logget ind, vis login-skærm
+if not st.session_state.get("authenticated", False):
+    login()
+    st.stop()
+
 
 # Load API key securely
 gemini_key = st.secrets["api_keys"]["gemini"]  # Ensure this matches the secrets file
 
-st.write("API Key Loaded Successfully!")  # Debugging
+#st.write("API Key Loaded Successfully!")  # Debugging
 
 # Konfigurer Gemini API
 genai.configure(api_key=gemini_key)  # Erstat med din rigtige API-nøgle
