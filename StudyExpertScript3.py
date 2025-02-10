@@ -24,7 +24,8 @@ def authenticate():
             if username in users and users[username] == password:
                 st.session_state["authenticated"] = True
                 st.session_state["username"] = username
-                st.success("Login lykkedes! Appen er nu tilgængelig.")
+                st.success("Login lykkedes! Appen genindlæses...")
+                st.rerun()  # Tvinger en opdatering af appen
             else:
                 st.error("Forkert brugernavn eller adgangskode")
         
