@@ -3,8 +3,8 @@ import fitz  # PyMuPDF
 import google.generativeai as genai
 
 
-# Access API key from secrets
-genai.configure(openai_key=st.secrets["openai"])
+# Load API key securely
+openai_key = st.secrets["api_keys"]["openai"]  # Ensure this matches the secrets file
 
 st.write("API Key Loaded Successfully!")  # Debugging
 
