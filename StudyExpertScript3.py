@@ -2,6 +2,8 @@ import streamlit as st
 import fitz  # PyMuPDF
 import google.generativeai as genai
 
+################ Brugerlås ved login ################
+
 # Hent brugere fra secrets
 users = st.secrets["users"]
 
@@ -31,15 +33,12 @@ def authenticate():
         
         st.stop()
 
-#authenticate()
+#authenticate() #Aktiver brugerlås (referere tilbage til secrets mappe, med brugernavn og password.)
 
-
-
+################ Load API-key ################
 
 # Load API key securely
 gemini_key = st.secrets["api_keys"]["gemini"]  # Ensure this matches the secrets file
-
-#st.write("API Key Loaded Successfully!")  # Debugging
 
 # Konfigurer Gemini API
 genai.configure(api_key=gemini_key)  # Erstat med din rigtige API-nøgle
