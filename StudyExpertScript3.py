@@ -56,7 +56,7 @@ def process_text_with_gemini(text, system_instruction):
     return response.text if response else "Ingen respons fra AI."
 
 def main():
-    st.title("PDF/Text Summarizer with AI")
+    st.title("PDF/Text BreakDownBot")
     st.write(f"Velkommen, {st.session_state['username']}! Upload en PDF-fil eller indsæt tekst, og vælg hvordan du vil behandle input.")
 
     uploaded_file = st.file_uploader("Vælg en PDF-fil", type="pdf")
